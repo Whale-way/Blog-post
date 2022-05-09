@@ -26,7 +26,7 @@ library(reticulate) # For rendering Python code
 ```
  
 
-```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Example photo-ID over time, Source: adapted from Kaggle"}
+```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Example photo-ID over time"}
 knitr::include_graphics("figures/photo_ID_example.png")
 ```
 
@@ -40,9 +40,10 @@ For several years, the impacts of man-made climate change have been specifically
 The identification by natural markings, via photographs is known as **photo-ID**.
 </aside>  
 
-Currently, the majority of research institutions still rely on ressource-intensive and sometimes inaccurate manual matching of photographs by the human eye. This slow and imprecise practice naturally limits the scope and impact of existing research. The automatized Image Classification of whales and dolphins could enable a scale of study previously unaffordable or impossible.  
-There are first attempts of using Machine Learning in marine biology and environmental protection to address this challenge. Most of the research either uses recordings of dolphin or whale sounds for classification [huang2016automated] or photographs of fins [hughes2017automated;reno2020fins] given that these are the two most common types of documenting (sounds or images) wild animals.  
+Currently, the majority of research institutions still rely on ressource-intensive and sometimes inaccurate manual matching of photographs by the human eye. This slow and imprecise practice naturally limits the scope and impact of existing research. The automatized Image Classification of whales and dolphins could enable a scale of study previously unaffordable or impossible. There are first attempts of using Machine Learning in marine biology and environmental protection to address this challenge. Most of the research either uses recordings of dolphin or whale sounds for classification [@huang2016automated] or photographs of fins [@hughes2017automated; @reno2020fins] given that these are the two most common types of documenting (sounds or images) wild animals.    
+  
 Current methods of these automated classification attempts are mostly Deep Learning (DL) approaches using convolutional neural networks (CNN). Regarding standard Machine Learning (ML) techniques, however, there is not much research to be found. This might be due to the challenging task of distinguishing between unique – but often very subtle – characteristics of the natural markings of whales and dolphins.  
+  
 In this article, we present a classical machine learning approach for automated photo-ID and test it against a the-state-of-the-art deep learning approach to see, if both approaches would be feasible. Our approaches focuses mainly on prediction precision and accuracy, and only secondary on prediction and training time, and is limited to images of dorsal fins and lateral body views.
 We broke down the task into three main challenges:
 
@@ -50,42 +51,36 @@ We broke down the task into three main challenges:
 2. Using and testing ML classifiers for species classification and 
 3. Implementing a DL model to extend the use case from the classification of species to individual animals.
 
-The dataset was provided by the Kaggle competition initiator "Happywhale" and includes over 50.000 images of fins and lateral body views of dolphins and whales in different pixel sizes. To be able to focus on the models, we based our apporaches on a pre-cropped dataset provided by a fellow Kaggler. Based on the state-of-the-art deep learning methods for image segmentation we use *Tracer* to remove the background from the images. In a next step we established a baseline for species prediction with a Softmax Logistic Regression model. Thereafter, two advanced decision tree models, a Random Forest and a XGBoost, are implemented and tuned in terms of speed and classification precision and accuracy. As the final part of our project, a Deep Learning algorithm capable of predicting the species as well as individual animals is implemented.
-
-
-
-text classification, we propose using Bidirectional Encoder Representations from Transformers (BERT) combined with neural networks to automate the task of labeling political texts. We compare our models that combine BERT and neural networks against previous experiments with similar architectures to establish that our proposed method outperforms other approaches commonly used in natural language processing research when it comes to choosing the correct policy domain and policy preference. We identify differences in performance across policy domains, paving the way for future work on improving deep learning models for classifying political texts.
-
+The dataset was provided by the Kaggle competition initiator "Happywhale" and includes over 50.000 images of fins and lateral body views of dolphins and whales in different pixel sizes. To be able to focus on the models, we based our apporaches on a pre-cropped dataset provided by a fellow Kaggler. Based on the state-of-the-art deep learning methods for image segmentation we use *Tracer* to remove the background from the images. In a next step we established a baseline for species prediction with a Softmax Logistic Regression model. Thereafter, two advanced decision tree models, a Random Forest and a XGBoost, are implemented and tuned in terms of speed and classification precision and accuracy. As the final part of our project, a Deep Learning algorithm capable of predicting the species as well as individual animals was implemented.
 
 <aside>
 **"Happywhale"** is a research collaboration and citizen science web platform with the mission to increase global understanding and caring for marine environments through high quality conservation science and education.
 </aside>
 
+Our results show that the subtle differences between 26 whale and dolphin species cannot be detected by classic ML classifiers with great precision. We demonstrate that while it is indeed possible to train the widely used ML models Logistic Regression, Random Forest and XGBoost on a large dataset of images, we show that the classifiers will never succeed in reaching precision and accuracy scores high enough for them to be applied on real-world tasks of predictions on image data with only minimal differences between classes. Consequently, our analysis finds that advanced Deep Learning models are needed, and that they achieve great accuracy and precision in computer vision tasks and are specifically well-suited to automate mundane image recognition jobs like photo-ID.
+
 ## Related Work 
 
-This section helps the reader understand the research context of your work, by providing an overview of existing work in the area.
+**Automated photo-ID with ML & DL:** The task of automating the identification of species or individuals through photo-ID is not entirely new to the research world. So far, most of the proposed solutions to this problem have been based on Convolutional Neural Networks (CNN) and related Deep Learning methods. Contributions addressing the effectiveness of conventional ML classifiers to challenges as complex as the one at hand remain scarce. 
+Faaeq et al. (2018) apply Machine Leaning algorithms to animal classification of a data set of 19 different animals [@faaeq2018image]. Differently to our dataset, the animals in their data were seen in their entirety on the image, and were of entirely distinct species (e.g. Lion, Elephant, Deer). Logistic Regression produced the best accuracy in their case (0.98). Regarding speed, Random Forest delivered the best results, beating Logistic Regression by a factor of eight. However, the researchers conclude that more powerful image classification models, specifically Deep Learning methods, are needed for classification tasks on more complex image datasets.
+Dhar and Guha (2021) find XGBoost to perform best in predicting the correct fish species, scoring a significantly higher precision score than Random Forest, k-Nearest-Neighbor (kNN) and Support Vector Machines (SVM) [@dhar2021fish]. In their research, two different datasets containing 483 respectively 10 different fish species were used. Again, the images in the dataset depicted the entire fish, which have significant differences in shape, colors and other features, as opposed to only body parts with little differences, as in our dataset. However, these two papers provided us with guidance as to which Machine Learning models are most promising for our project.  
+  
+**Image Segmentation:** In the past, image segmentation algorithms with different approaches have emerged, but the emergence of Deep Learning models has “caused a paradigm shift” [@9356353] in the field of image segmentation, because they perform so well. Image segmentation with Deep Learning is a widely researched field of computer vision with wide and diverse applications in real life, like autonomous driving, medical imaging, video surveillance, and saliency detection [@10.1145/3329784]. There is a plethora of widely used algorithms for different fields of application which can be differentiated by being (un-)supervised, their type of learning and the level of segmentation (ibid.). For this part of the project, we used *Tracer*, a convolutional attention-guided tool, as it proved to perform remarkably well at a relatively low computation time [@lee2021tracer].
 
-- You might discuss: papers that inspired your approach, papers that you use as baselines, papers proposing alternative approaches to the problem, papers applying your methods to different tasks, etc.
-
-- This section shouldn't go into deep detail in any one paper (for example, there probably shouldn't be any equations) -- instead it should explain how the papers relate to each other, and how they relate to your work.
-
-copy pasted 
-
-**See below for an example of how to cite related work in Markdown.**
-
-Bidirectional Encoder Representations from Transformers (BERT) have proven successful in prior attempts to classify phrases and short texts [@devlin2018bert].
-
-**Footnotes and Sidenotes**
-
-You can use footnotes ^[This is a footnote. You can view this by hovering over the footnote in text.] or sidenotes to elaborate on a concept throughout the paper. 
-
-<aside>
-This is a side note. 
-</aside>
 
 ## The Happywhale Dataset 
 **Describe the Data**:Describe the dataset(s) and preprossing  you are using (provide references). If it's not already clear, make sure the associated task is clearly described.
 species graph 
+
+Since our project is based on a Kaggle competition ^[The competition can be found here: https://www.kaggle.com/c/happy-whale-and-dolphin], there was a pre-split dataset provided, containing 27,956 images in the test set and 51,033 images in the training set of whales and dolphins. In the course of the project we decided to use a pre-cropped dataset provided by a fellow Kaggle-competitor^[The pre-cropped dataset can be found here: https://www.kaggle.com/datasets/phalanx/whale2-cropped-dataset] to focus on the implementation of the classifiers.Additionally, a .CSV-file is provided that contains filename (of the corresponding image), individual-ID and the species. Images focus on dorsal fins and lateral body views. As the corresponding labels to the test-set images were not published after the end of the Kaggle competition we could only use the 51,033 images in the training set as the basis for our ML and DL models. Important to note is that the dataset is quite unbalanced (see figure 2), both with regards to species as well as individuals. There are 8 (out of 26) species which, pre- splitting, were only represented less than 200 times compared to the top three classes that are represented each over 5000 times.
+
+```{r fig2, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Distribution of Species across the dataset"}
+knitr::include_graphics("figures/species_distribution.png")
+```
+
+Before the modelling, we split our dataset into a training set (30.000 images), a val- idation set (10.826 images) and a test set (10.207 images).
+
+
 prepossed fin vs orginal
 
 ###Data Preprocessing: Image Segmentation
@@ -94,7 +89,7 @@ prepossed fin vs orginal
 
 **Below is an example of a figure:**
 
-```{r fig2, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Model architecture"}
+```{r fig3, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Model architecture"}
 knitr::include_graphics("figures/BERTfig3.png")
 ```
 
@@ -151,3 +146,14 @@ copy paste
 ## Acknowledgments 
 Kaggle, 
 List acknowledgments, if any. For example, if someone provided you a dataset, or you used someone else's resources, this is a good place to acknowledge the help or support you received.
+
+
+
+
+**Footnotes and Sidenotes**
+
+You can use footnotes ^[This is a footnote. You can view this by hovering over the footnote in text.] or sidenotes to elaborate on a concept throughout the paper. 
+
+<aside>
+This is a side note. 
+</aside>
