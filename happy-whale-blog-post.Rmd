@@ -22,7 +22,7 @@ bibliography: bibliography.bib
 knitr::opts_chunk$set(echo = FALSE)
 
 # Load dependencies 
-library(reticulate) # For rendering Python code 
+#library(reticulate) # For rendering Python code 
 ```
  
 
@@ -72,13 +72,13 @@ Dhar and Guha (2021) find XGBoost to perform best in predicting the correct fish
 **Describe the Data**:Describe the dataset(s) and preprossing  you are using (provide references). If it's not already clear, make sure the associated task is clearly described.
 species graph 
 
-Since our project is based on a Kaggle competition ^[The competition can be found here: https://www.kaggle.com/c/happy-whale-and-dolphin], there was a pre-split dataset provided, containing 27,956 images in the test set and 51,033 images in the training set of whales and dolphins. In the course of the project we decided to use a pre-cropped dataset provided by a fellow Kaggle-competitor^[The pre-cropped dataset can be found here: https://www.kaggle.com/datasets/phalanx/whale2-cropped-dataset] to focus on the implementation of the classifiers.Additionally, a .CSV-file is provided that contains filename (of the corresponding image), individual-ID and the species. Images focus on dorsal fins and lateral body views. As the corresponding labels to the test-set images were not published after the end of the Kaggle competition we could only use the 51,033 images in the training set as the basis for our ML and DL models. Important to note is that the dataset is quite unbalanced (see figure 2), both with regards to species as well as individuals. There are 8 (out of 26) species which, pre- splitting, were only represented less than 200 times compared to the top three classes that are represented each over 5000 times.
+Since our project is based on a Kaggle competition ^[The competition can be found here: https://www.kaggle.com/c/happy-whale-and-dolphin], there was a pre-split dataset provided, containing 27,956 images in the test set and 51,033 images in the training set of whales and dolphins. In the course of the project we decided to use a pre-cropped dataset provided by a fellow Kaggle-competitor ^[The pre-cropped dataset can be found here: https://www.kaggle.com/datasets/phalanx/whale2-cropped-dataset] to focus on the implementation of the classifiers.Additionally, a .CSV-file is provided that contains filename (of the corresponding image), individual-ID and the species. Images focus on dorsal fins and lateral body views. As the corresponding labels to the test-set images were not published after the end of the Kaggle competition we could only use the 51,033 images in the training set as the basis for our ML and DL models. Important to note is that the dataset is quite unbalanced (see figure 2), both with regards to species as well as individuals. There are 8 (out of 26) species which, pre- splitting, were only represented less than 200 times compared to the top three classes that are represented each over 5000 times.
 
 ```{r fig2, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Distribution of Species across the dataset"}
 knitr::include_graphics("figures/species_distribution.png")
 ```
 
-Before the modelling, we split our dataset into a training set (30.000 images), a val- idation set (10.826 images) and a test set (10.207 images).
+Before the modelling, we split our dataset into a training set (30.000 images), a validation set (10.826 images) and a test set (10.207 images).
 
 
 prepossed fin vs orginal
@@ -87,11 +87,6 @@ prepossed fin vs orginal
 
 - lets put the description of the Tracer here close to the description of the data 
 
-**Below is an example of a figure:**
-
-```{r fig3, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Model architecture"}
-knitr::include_graphics("figures/BERTfig3.png")
-```
 
 ## Experimental Setup 
 
@@ -112,21 +107,6 @@ Describe the evaluation metric(s) you used, plus any other details necessary to 
 only techinal numbers and graphs here, compare both, Are they what you expected? Better than you expected? Worse than you expected? Why do you think that is? What does this tell you about what you should do next? Including training curves might be useful to discuss whether things are training effectively.
 
 
-
-***Note***: **Feel free to use some of the code from your project to explain your experiments. See example code block below.**
-
-```{python bertcnn model parameters, echo = TRUE, eval = FALSE}
-OUTPUT_DIM = len(LABEL.vocab)
-DROPOUT = 0.5
-N_FILTERS = 100
-FILTER_SIZES = [2,3]
-
-model = BERTCNN(bert,
-                OUTPUT_DIM,
-                DROPOUT,
-                N_FILTERS,
-                FILTER_SIZES)
-```
 
 ## Analysis and Limitations
 
