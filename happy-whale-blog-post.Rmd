@@ -1,20 +1,20 @@
 ---
-title: "Distill Article Template for NLP Final Report"
+title: "Automating photo-ID of Whales and Dolphins"
 description: |
-  Add a short description of your article here (i.e. "We present a deep learning approach to classifying labeled texts and phrases in party manifestos, using the coding scheme and documents from the Manifesto Project Corpus.")
+  We present a classical machine learning and an advanced deep learning approach to automate the photo-ID of whales and dolphins on the species and individual level.
 author: 
-  - name: Allison Koh 
-    url: https://allisonkoh.github.io
-  - name: Second Author 
+  - name: Maren Rieker 
+  - name: Victor Möslein
+  - name: Reed Garvin
+  - name: Dinah Rabe 
 date: "`r Sys.Date()`" 
 categories: 
-  - Natural Language Processing 
+  - Machine Learning 
 creative_commons: CC BY
-repository_url: https://github.com/allisonkoh/distill-template/
+repository_url: https://github.com/Whale-way
 output: 
   distill::distill_article: 
     self_contained: false
-preview: figures/BERTfig3.png
 bibliography: bibliography.bib
 ---
 
@@ -24,14 +24,17 @@ knitr::opts_chunk$set(echo = FALSE)
 # Load dependencies 
 library(reticulate) # For rendering Python code 
 ```
- pictures of whale through time
+ 
+
+```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Example photo-ID over time, Source: adapted from Kaggle"}
+knitr::include_graphics("figures/photo_ID_example.png")
+```
  
 ## Abstract 
 
-An abstract should concisely (less than 300 words) motivate the problem, describe your aims, describe your contribution, and highlight your main finding(s). 
-copied but less techinacal 
+Man-made climate change is one of the main challenges for humanity and of concern for many scientific disciplines investigating its multiple, complex impacts on nature and societies. One of the ecosystems impacted are marine ecosystems. Research concerning marine mammals makes an important contribution to our knowledge about changes in the oceans, as marine mammals are indicators of ocean ecosystem health. Therefore their protection and conservation is a crucial task. Up until today, most observation and tracking of individual animals and populations is done manually by humans - a time consuming and error- prone method. Motivated by a Kaggle competition funded by the research collaboration ”Happywhale”, we aim to contribute to the efforts by automating whale and dolphin photo-ID to significantly reduce image identification times. We investigated the use of conventional Machine Learning and a Deep Learning algorithm for this image classification task.As expected, we find that conventional machine learning classifiers under-perform in correctly distinguishing between subtle characteristics of the natural markings of whales and dolphins and therefore state-of-the-art deep learning models are needed for this complex task. 
 
-## Introduction / Background
+## Background
 
 The introduction explains the problem, why it's difficult, interesting, or important, how and why current methods succeed/fail at the problem, and explains the key ideas of your approach and results. Though an introduction covers similar material as an abstract, the introduction gives more space for motivation, detail, references to existing work, and to capture the reader's interest.
 
@@ -72,7 +75,7 @@ proposed methods: inshert photo showing different graphs
 
 **Below is an example of a figure:**
 
-```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Model architecture"}
+```{r fig2, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Model architecture"}
 knitr::include_graphics("figures/BERTfig3.png")
 ```
 
