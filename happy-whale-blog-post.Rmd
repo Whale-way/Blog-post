@@ -29,16 +29,37 @@ library(reticulate) # For rendering Python code
 ```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Example photo-ID over time, Source: adapted from Kaggle"}
 knitr::include_graphics("figures/photo_ID_example.png")
 ```
- 
-## Abstract 
 
 Man-made climate change is one of the main challenges for humanity and of concern for many scientific disciplines investigating its multiple, complex impacts on nature and societies. One of the ecosystems impacted are marine ecosystems. Research concerning marine mammals makes an important contribution to our knowledge about changes in the oceans, as marine mammals are indicators of ocean ecosystem health. Therefore their protection and conservation is a crucial task. Up until today, most observation and tracking of individual animals and populations is done manually by humans - a time consuming and error- prone method. Motivated by a Kaggle competition funded by the research collaboration ”Happywhale”, we aim to contribute to the efforts by automating whale and dolphin photo-ID to significantly reduce image identification times. We investigated the use of conventional Machine Learning and a Deep Learning algorithm for this image classification task.As expected, we find that conventional machine learning classifiers under-perform in correctly distinguishing between subtle characteristics of the natural markings of whales and dolphins and therefore state-of-the-art deep learning models are needed for this complex task. 
 
 ## Background
 
-The introduction explains the problem, why it's difficult, interesting, or important, how and why current methods succeed/fail at the problem, and explains the key ideas of your approach and results. Though an introduction covers similar material as an abstract, the introduction gives more space for motivation, detail, references to existing work, and to capture the reader's interest.
+For several years, the impacts of man-made climate change have been specifically visible through the alteration and destruction of the marine ecosystem. A worrying development is the change in the migratory behavior of whales, dolphins and sharks as it is a strong indicator for the destruction of the ecosystems they are living in. The protection and conservation of marine mammals is crucial to the balance and therefore the health of ecosystems. To be able to carry out meaningful conservation efforts, the first steps are understanding the status quo of different animal populations and their migration patterns by identification and monitoring of individual animals.
 
-what we have and maybe less techicnical, focus on the happy use case , intiatied compitetion  
+<aside>
+The identification by natural markings, via photographs is known as **photo-ID**.
+</aside>  
+
+Currently, the majority of research institutions still rely on ressource-intensive and sometimes inaccurate manual matching of photographs by the human eye. This slow and imprecise practice naturally limits the scope and impact of existing research. The automatized Image Classification of whales and dolphins could enable a scale of study previously unaffordable or impossible.  
+There are first attempts of using Machine Learning in marine biology and environmental protection to address this challenge. Most of the research either uses recordings of dolphin or whale sounds for classification [huang2016automated] or photographs of fins [hughes2017automated;reno2020fins] given that these are the two most common types of documenting (sounds or images) wild animals.  
+Current methods of these automated classification attempts are mostly Deep Learning (DL) approaches using convolutional neural networks (CNN). Regarding standard Machine Learning (ML) techniques, however, there is not much research to be found. This might be due to the challenging task of distinguishing between unique – but often very subtle – characteristics of the natural markings of whales and dolphins.  
+In this article, we present a classical machine learning approach for automated photo-ID and test it against a the-state-of-the-art deep learning approach to see, if both approaches would be feasible. Our approaches focuses mainly on prediction precision and accuracy, and only secondary on prediction and training time, and is limited to images of dorsal fins and lateral body views.
+We broke down the task into three main challenges:
+
+1. Removing the animal from the rest of the picture using Image Segmentation, 
+2. Using and testing ML classifiers for species classification and 
+3. Implementing a DL model to extend the use case from the classification of species to individual animals.
+
+The dataset was provided by the Kaggle competition initiator "Happywhale" and includes over 50.000 images of fins and lateral body views of dolphins and whales in different pixel sizes. To be able to focus on the models, we based our apporaches on a pre-cropped dataset provided by a fellow Kaggler. Based on the state-of-the-art deep learning methods for image segmentation we use *Tracer* to remove the background from the images. In a next step we established a baseline for species prediction with a Softmax Logistic Regression model. Thereafter, two advanced decision tree models, a Random Forest and a XGBoost, are implemented and tuned in terms of speed and classification precision and accuracy. As the final part of our project, a Deep Learning algorithm capable of predicting the species as well as individual animals is implemented.
+
+
+
+text classification, we propose using Bidirectional Encoder Representations from Transformers (BERT) combined with neural networks to automate the task of labeling political texts. We compare our models that combine BERT and neural networks against previous experiments with similar architectures to establish that our proposed method outperforms other approaches commonly used in natural language processing research when it comes to choosing the correct policy domain and policy preference. We identify differences in performance across policy domains, paving the way for future work on improving deep learning models for classifying political texts.
+
+
+<aside>
+**"Happywhale"** is a research collaboration and citizen science web platform with the mission to increase global understanding and caring for marine environments through high quality conservation science and education.
+</aside>
 
 ## Related Work 
 
@@ -62,16 +83,14 @@ You can use footnotes ^[This is a footnote. You can view this by hovering over t
 This is a side note. 
 </aside>
 
-## Proposed Method 
+## The Happywhale Dataset 
+**Describe the Data**:Describe the dataset(s) and preprossing  you are using (provide references). If it's not already clear, make sure the associated task is clearly described.
+species graph 
+prepossed fin vs orginal
 
-This section details your approach(es) to the problem. For example, this is where you describe the architecture of your model, and any other key methods or algorithms.
+###Data Preprocessing: Image Segmentation
 
-- You should be specific when describing your main approaches -- you probably want to include equations and figures.
-- You should also describe your baseline(s). Depending on space constraints, and how standard your baseline is, you might do this in detail, or simply refer the reader to some other paper for the details. 
-- If any part of your approach is original, make it clear (so we can give you credit!). For models and techniques that aren't yours, provide references.
-- If you're using any code that you didn't write yourself, make it clear and provide a reference or link. When describing something you coded yourself, make it clear (so we can give you credit!).
-
-proposed methods: inshert photo showing different graphs
+- lets put the description of the Tracer here close to the description of the data 
 
 **Below is an example of a figure:**
 
@@ -79,15 +98,20 @@ proposed methods: inshert photo showing different graphs
 knitr::include_graphics("figures/BERTfig3.png")
 ```
 
-## Experiments 
+## Experimental Setup 
 
-**Describe the Data**:Describe the dataset(s) and preprossing  you are using (provide references). If it's not already clear, make sure the associated task is clearly described.
-species graph 
-prepossed fin vs orginal
-**Classical Aproach**: Describe the evaluation metric(s) you used, plus any other details necessary to understand your evaluation. How you ran your experiments (e.g. model configurations, learning rate, training time, etc.) 
+###Conventional Machine Learning Aproach 
+- describe the models used and the tuning setup
+Describe the evaluation metric(s) you used, plus any other details necessary to understand your evaluation. How you ran your experiments (e.g. model configurations, learning rate, training time, etc.) 
 
-**Deep Learning Approach**: Describe the evaluation metric(s) you used, plus any other details necessary to understand your evaluation. How you ran your experiments (e.g. model configurations, learning rate, training time, etc.) 
+###Deep Learning Aproach
+- describe the models used and the tuning setup
 
+
+###Evaluation
+- just very shortly 
+
+## Results
 **Results**: Report the quantitative results that you have found so far. Use a table or plot to compare multiple results and compare against baselines. 
 
 only techinal numbers and graphs here, compare both, Are they what you expected? Better than you expected? Worse than you expected? Why do you think that is? What does this tell you about what you should do next? Including training curves might be useful to discuss whether things are training effectively.
@@ -109,7 +133,7 @@ model = BERTCNN(bert,
                 FILTER_SIZES)
 ```
 
-## Analysis 
+## Analysis and Limitations
 
 Your report should include some qualitative evaluation. That is, try to understand your system (how it works, when it succeeds and when it fails) by measuring or inspecting key characteristics or outputs of your model.
 
@@ -123,6 +147,7 @@ copy paste but remove technical jargon
 
 Summarize the main findings of your project, and what you learned. Highlight your achievements, and note the primary limitations of your work. If you like, you can describe avenues for future work.
 copy paste
+
 ## Acknowledgments 
 Kaggle, 
 List acknowledgments, if any. For example, if someone provided you a dataset, or you used someone else's resources, this is a good place to acknowledge the help or support you received.
