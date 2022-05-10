@@ -64,7 +64,10 @@ Our results show that the subtle differences between 26 whale and dolphin specie
 **Automated photo-ID with ML & DL:** The task of automating the identification of species or individuals through photo-ID is not entirely new to the research world. So far, most of the proposed solutions to this problem have been based on Convolutional Neural Networks (CNN) and related Deep Learning methods. Contributions addressing the effectiveness of conventional ML classifiers to challenges as complex as the one at hand remain scarce. 
 Faaeq et al. (2018) apply Machine Leaning algorithms to animal classification of a data set of 19 different animals [@faaeq2018image]. Differently to our dataset, the animals in their data were seen in their entirety on the image, and were of entirely distinct species (e.g. Lion, Elephant, Deer). Logistic Regression produced the best accuracy in their case (0.98). Regarding speed, Random Forest delivered the best results, beating Logistic Regression by a factor of eight. However, the researchers conclude that more powerful image classification models, specifically Deep Learning methods, are needed for classification tasks on more complex image datasets.
 Dhar and Guha (2021) find XGBoost to perform best in predicting the correct fish species, scoring a significantly higher precision score than Random Forest, k-Nearest-Neighbor (kNN) and Support Vector Machines (SVM) [@dhar2021fish]. In their research, two different datasets containing 483 respectively 10 different fish species were used. Again, the images in the dataset depicted the entire fish, which have significant differences in shape, colors and other features, as opposed to only body parts with little differences, as in our dataset. However, these two papers provided us with guidance as to which Machine Learning models are most promising for our project.  
-  
+
+```{r fig4, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Comparison of EfficentNet to other Image classifcation Models"}
+knitr::include_graphics("figures/dlmodelcomp.png")
+```
 **Image Segmentation:** In the past, image segmentation algorithms with different approaches have emerged, but the emergence of Deep Learning models has “caused a paradigm shift” [@9356353] in the field of image segmentation, because they perform so well. Image segmentation with Deep Learning is a widely researched field of computer vision with wide and diverse applications in real life, like autonomous driving, medical imaging, video surveillance, and saliency detection [@10.1145/3329784]. There is a plethora of widely used algorithms for different fields of application which can be differentiated by being (un-)supervised, their type of learning and the level of segmentation (ibid.). For this part of the project, we used *Tracer*, a convolutional attention-guided tool, as it proved to perform remarkably well at a relatively low computation time [@lee2021tracer].
 
 
@@ -103,49 +106,45 @@ name, as we discovered misspellings in the species column
 
 Originally, it was planned to tune, train and test the ML models first on the images before PCA is applied and then a second time after PCA has been applied on the data to validate the assumption that a large amount of white pixels can be dropped from the segmented images without loosing any relevant information for classification. But running any machine learning model on our available hardware (there was no constant availability of the Hertie Server) was impossible even for a reduced resolution of the images of 48 x 48 (which results in 6,912 features per image). For this reason, the application of PCA had to be moved to the beginning.
 
-- describe the models used and the tuning setup
-Describe the evaluation metric(s) you used, plus any other details necessary to understand your evaluation. How you ran your experiments (e.g. model configurations, learning rate, training time, etc.) 
 
 ###Deep Learning Aproach
-- describe the models used and the tuning setup
+
+In the first attempt of the Deep Learning model we attempted to use six layers after the baseline Efficentnet. There were certain layers that caused too much strain on our server recourse and thus we deceided to cut them out from our model. We then used a package to clear any memory before running the model, which allowed for better chance of the model running successfully. 
+
+This was then followed by another CNN model. To ensure peak learning of the model, we used two Keras packages that stop the learning when it is no longer improving. This helps to protect the model from over-fitting and ensures that it is as accurate and precise as possible. The overall time was, on average, 8 hours when using individual IDs as classifiers, with each epoch taking an average of 40 seconds.
 
 
 ###Evaluation
-- just very shortly 
+
+For the ML models it was expected to achieve a low performance. In that regard, the scores of our models achieve better results than expected, especially as the precision score is above 10% for each classifier. An issue that persists across all our models is the high degree of over-fitting to the training data. The implemented ML models were not capable of handling the complexity of the data set, especially since more intense grid search cross-validation could not be performed given the limitations in computational power.
+
+The Deep Learning models were expected to achieve higher precision than 0.00005, however after changing our parameters after our Baseline results by increasing the number of epochs and switching to a different version of EfficentNet we were able to increase both our accuracy and precision score, while decreasing our loss. As a result, we were able to deduce that increasing the number of epochs would increase precision by comparing our results to those of other Kagglers.
+ 
 
 ## Results
 **Results**: Report the quantitative results that you have found so far. Use a table or plot to compare multiple results and compare against baselines. 
 
-only techinal numbers and graphs here, compare both, Are they what you expected? Better than you expected? Worse than you expected? Why do you think that is? What does this tell you about what you should do next? Including training curves might be useful to discuss whether things are training effectively.
+Results For the ML models the following results on our evaluation scores were obtained after predicting the labels in the test set. The tuned XGBoost Classifier yielded the best scores in every category except for the training time, with a top precision score of 11.8% and accuracy of 17%. The training time of 26 minutes 48 seconds is significantly higher than that of the Softmax (LG) and Random Forest models. The accuracy of the untuned XGB was 0.168, the precision 0.036, the recall 0.04 and the F1-score 0.025. The accuracy of the untuned RF was 0.11, the precision 0.044, the recall 0.21 and the F1-score 0.073. 
 
+The results in the Deep Learning models were varied. The Baseline model had a mean average precision score of 0.00005 after 200 epochs, but by switching from EficentNetB0 to B1 and increasing the number of epochs to 500, we were able to increase the score to 11%. Running the adjusted model, however, more than doubled the running time from around 3 to around 8 hours. The loss of the baseline model is around 1.5, and for the tuned model around 1. Our model in predicting species was already quite high in accuracy at 60% after only two epochs, showing its performance when presented with 26 vs over 11,000 classes. Its loss score was 1.3 and it ran in only three minutes.
 
 
 ## Analysis and Limitations
 
-Your report should include some qualitative evaluation. That is, try to understand your system (how it works, when it succeeds and when it fails) by measuring or inspecting key characteristics or outputs of your model.
 
-- Types of qualitative evaluation include: commenting on selected examples, error analysis, measuring the performance metric for certain subsets of the data, ablation studies, comparing the behaviors of two systems beyond just the performance metric, and visualizing attention distributions or other activation heatmaps.
+Next to our quantitative assessment we looked more deeply at errors and their origin in the dataset. We, firstly, created error tables that enable us to identify the image IDs for pictures that were predicted wrongly. Next, a confusion matrix was used to get a better understanding of the error distribution. This analysis is, for sake of clarity, limited to the tuned classifiers. Considering the multiple steps of our project, the first possible source for errors is the pre-cropped dataset which includes distorted and blurred images that could be considered outliers. Furthermore, considering the imbalance of our dataset, there is a large amount of errors stemming from an underrepresention of species. There are multiple classes none of which the ML classifiers were able to entirely predict correclty. This could be due to the fact that there are some species which do not have very unique or distinguishable fins (or no fins at all, such as beluga whales). Therefore separately training and setting the thresholds for each species could be a way forward to improve prediction success.
 
-- The Practical Tips lecture notes has a detailed section on qualitative evaluation -- you may find it useful to reread it.
+Our research was bound by certain limitations such as, resource constraints, especially in terms of time and computational power. Keeping that in mind, in the following paragraph we discuss in detail where there is room for possible improvements. The project could have been improved with more extensive hyperparameter tuning, and by including further hyperparameters. We do not expect the results for the conventional ML models to increase in a way that they are comparable to the DL model, but certainly some improvements in prediction performance. As discussed, DL models dominate the literature, therefore we would suggest to focus the improvements on the DL model. For the implemented Deep Learning model, it would have been beneficial to have more GPU power and training time to train it more extensively. The leading participants of the Kaggle competition submitted multiple hundreds of attempts and retrained their models accordingingly.
 
-copy paste but remove technical jargon 
 
 ## Conclusion(s)
 
-Summarize the main findings of your project, and what you learned. Highlight your achievements, and note the primary limitations of your work. If you like, you can describe avenues for future work.
-copy paste
+This project confirms current research practice that conventional ML algorithms are not optimized for solving complex classification tasks in a very precise and quick manner, and that Deep Learning approaches, such as CNN, are needed for tasks including but not limited to automating photo-ID and matching. We achieved and accuracy scores of 17% with the conventional ML models on species identification, but accuracy of over 60% with a only limited trained Deep Learning model. Especially when aiming for the original goal of the Kaggle Competition to identify individual animals, a extensively trained DL model is needed to build on the 11% accuracy achieved.
+
 
 ## Acknowledgments 
-Kaggle, 
-List acknowledgments, if any. For example, if someone provided you a dataset, or you used someone else's resources, this is a good place to acknowledge the help or support you received.
 
 
+As explained above, we decided in the course of the project to rely on a pre-cropped dataset. We are therefore grateful to the Kaggle User Phalanx for providing it. In addition, we thank Kaggle User Adnan Pen for inspiring us to use Tracer for the Image Segmentation part.
 
 
-**Footnotes and Sidenotes**
-
-You can use footnotes ^[This is a footnote. You can view this by hovering over the footnote in text.] or sidenotes to elaborate on a concept throughout the paper. 
-
-<aside>
-This is a side note. 
-</aside>
