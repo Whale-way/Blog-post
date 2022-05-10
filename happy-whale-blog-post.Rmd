@@ -106,6 +106,7 @@ name, as we discovered misspellings in the species column
 
 Originally, it was planned to tune, train and test the ML models first on the images before PCA is applied and then a second time after PCA has been applied on the data to validate the assumption that a large amount of white pixels can be dropped from the segmented images without loosing any relevant information for classification. But running any machine learning model on our available hardware (there was no constant availability of the Hertie Server) was impossible even for a reduced resolution of the images of 48 x 48 (which results in 6,912 features per image). For this reason, the application of PCA had to be moved to the beginning.
 
+- i am not done here yet, will finish it later
 
 ###Deep Learning Aproach
 
@@ -115,24 +116,34 @@ This was then followed by another CNN model. To ensure peak learning of the mode
 
 
 ###Evaluation
+- thought we would only describe our evaluation metrics here
+- just a short list of the chosen evaluation metrics (like the BERT thing)
+- and then i just moved your paragraphgs into the results section
 
-For the ML models it was expected to achieve a low performance. In that regard, the scores of our models achieve better results than expected, especially as the precision score is above 10% for each classifier. An issue that persists across all our models is the high degree of over-fitting to the training data. The implemented ML models were not capable of handling the complexity of the data set, especially since more intense grid search cross-validation could not be performed given the limitations in computational power.
-
-The Deep Learning models were expected to achieve higher precision than 0.00005, however after changing our parameters after our Baseline results by increasing the number of epochs and switching to a different version of EfficentNet we were able to increase both our accuracy and precision score, while decreasing our loss. As a result, we were able to deduce that increasing the number of epochs would increase precision by comparing our results to those of other Kagglers.
  
 
 ## Results
 **Results**: Report the quantitative results that you have found so far. Use a table or plot to compare multiple results and compare against baselines. 
 
-Results For the ML models the following results on our evaluation scores were obtained after predicting the labels in the test set. The tuned XGBoost Classifier yielded the best scores in every category except for the training time, with a top precision score of 11.8% and accuracy of 17%. The training time of 26 minutes 48 seconds is significantly higher than that of the Softmax (LG) and Random Forest models. The accuracy of the untuned XGB was 0.168, the precision 0.036, the recall 0.04 and the F1-score 0.025. The accuracy of the untuned RF was 0.11, the precision 0.044, the recall 0.21 and the F1-score 0.073. 
+Results For the ML models the following results on our evaluation scores were obtained after predicting the labels in the test set. The tuned XGBoost Classifier yielded the best scores in every category except for the training time, with a top precision score of 11.8% and accuracy of 17%. The training time of 26 minutes 48 seconds is significantly higher than that of the Softmax (LG) and Random Forest models. 
+
+- maybe replace the following paragraph (The accuracy of the untuned XGB was 0.168, the precision 0.036, the recall 0.04 and the F1-score 0.025. The accuracy of the untuned RF was 0.11, the precision 0.044, the recall 0.21 and the F1-score 0.073.) - with an overview of the evaluation results is given in the following table
+- and then include the results table for ML
+
+For the ML models it was expected to achieve a low performance. In that regard, the scores of our models achieve better results than expected, especially as the precision score is above 10% for each classifier. An issue that persists across all our models is the high degree of over-fitting to the training data. The implemented ML models were not capable of handling the complexity of the data set, especially since more intense grid search cross-validation could not be performed given the limitations in computational power.
 
 The results in the Deep Learning models were varied. The Baseline model had a mean average precision score of 0.00005 after 200 epochs, but by switching from EficentNetB0 to B1 and increasing the number of epochs to 500, we were able to increase the score to 11%. Running the adjusted model, however, more than doubled the running time from around 3 to around 8 hours. The loss of the baseline model is around 1.5, and for the tuned model around 1. Our model in predicting species was already quite high in accuracy at 60% after only two epochs, showing its performance when presented with 26 vs over 11,000 classes. Its loss score was 1.3 and it ran in only three minutes.
+
+- a summary of the evaluation results is provided in the following table:
+- include the results table of the DL model
+
+The Deep Learning models were expected to achieve higher precision than 0.00005, however after changing our parameters after our Baseline results by increasing the number of epochs and switching to a different version of EfficentNet we were able to increase both our accuracy and precision score, while decreasing our loss. As a result, we were able to deduce that increasing the number of epochs would increase precision by comparing our results to those of other Kagglers.
 
 
 ## Analysis and Limitations
 
 
-Next to our quantitative assessment we looked more deeply at errors and their origin in the dataset. We, firstly, created error tables that enable us to identify the image IDs for pictures that were predicted wrongly. Next, a confusion matrix was used to get a better understanding of the error distribution. This analysis is, for sake of clarity, limited to the tuned classifiers. Considering the multiple steps of our project, the first possible source for errors is the pre-cropped dataset which includes distorted and blurred images that could be considered outliers. Furthermore, considering the imbalance of our dataset, there is a large amount of errors stemming from an underrepresention of species. There are multiple classes none of which the ML classifiers were able to entirely predict correclty. This could be due to the fact that there are some species which do not have very unique or distinguishable fins (or no fins at all, such as beluga whales). Therefore separately training and setting the thresholds for each species could be a way forward to improve prediction success.
+Next to our quantitative assessment we looked more deeply at errors and their origin in the dataset. We, firstly, created error tables that enable us to identify the image IDs for pictures that were predicted wrongly. Next, a confusion matrix was used to get a better understanding of the error distribution. This analysis is, for sake of clarity, limited to the tuned classifiers. Considering the multiple steps of our project, the first possible source for errors is the pre-cropped dataset which includes distorted and blurred images that could be considered outliers. Furthermore, considering the imbalance of our dataset, there is a large amount of errors stemming from an under-represention of species. There are multiple classes none of which the ML classifiers were able to entirely predict correclty. This could be due to the fact that there are some species which do not have very unique or distinguishable fins (or no fins at all, such as beluga whales). Therefore separately training and setting the thresholds for each species could be a way forward to improve prediction success.
 
 Our research was bound by certain limitations such as, resource constraints, especially in terms of time and computational power. Keeping that in mind, in the following paragraph we discuss in detail where there is room for possible improvements. The project could have been improved with more extensive hyperparameter tuning, and by including further hyperparameters. We do not expect the results for the conventional ML models to increase in a way that they are comparable to the DL model, but certainly some improvements in prediction performance. As discussed, DL models dominate the literature, therefore we would suggest to focus the improvements on the DL model. For the implemented Deep Learning model, it would have been beneficial to have more GPU power and training time to train it more extensively. The leading participants of the Kaggle competition submitted multiple hundreds of attempts and retrained their models accordingingly.
 
