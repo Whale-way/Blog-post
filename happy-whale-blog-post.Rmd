@@ -116,11 +116,12 @@ This was then followed by another CNN model. To ensure peak learning of the mode
 
 
 ###Evaluation
-- thought we would only describe our evaluation metrics here
-- just a short list of the chosen evaluation metrics (like the BERT thing)
-- and then i just moved your paragraphgs into the results section
 
- 
+For the evaluation of our Deep Learning classifier we used:
+
+**Categorical Crossentropy** which is a loss function that is used in mutually-exclusive multi-class classification tasks. These are tasks where an example can only belong to one out of many possible categories, and the model must decide which one.
+**Mean Average Precision** For the evaluation of the results of the individuals precision,score at 5 was calculated by Kaggle. This allows to predict five IDs per image, whereby a score of one is reached for the image if one of those five is correct.
+For the purpose of species prediction, **the accuracy score and precision scores** were used as the primary metric, to make the results of the ML models comparable.
 
 ## Results
 **Results**: Report the quantitative results that you have found so far. Use a table or plot to compare multiple results and compare against baselines. 
