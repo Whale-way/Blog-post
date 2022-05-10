@@ -65,7 +65,7 @@ Our results show that the subtle differences between 26 whale and dolphin specie
 Faaeq et al. (2018) apply Machine Leaning algorithms to animal classification of a data set of 19 different animals [@faaeq2018image]. Differently to our dataset, the animals in their data were seen in their entirety on the image, and were of entirely distinct species (e.g. Lion, Elephant, Deer). Logistic Regression produced the best accuracy in their case (0.98). Regarding speed, Random Forest delivered the best results, beating Logistic Regression by a factor of eight. However, the researchers conclude that more powerful image classification models, specifically Deep Learning methods, are needed for classification tasks on more complex image datasets.
 Dhar and Guha (2021) find XGBoost to perform best in predicting the correct fish species, scoring a significantly higher precision score than Random Forest, k-Nearest-Neighbor (kNN) and Support Vector Machines (SVM) [@dhar2021fish]. In their research, two different datasets containing 483 respectively 10 different fish species were used. Again, the images in the dataset depicted the entire fish, which have significant differences in shape, colors and other features, as opposed to only body parts with little differences, as in our dataset. However, these two papers provided us with guidance as to which Machine Learning models are most promising for our project.  
 
-```{r fig4, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Comparison of EfficentNet to other Image classifcation Models"}
+```{r fig2, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Comparison of EfficentNet to other Image classifcation Models"}
 knitr::include_graphics("figures/dlmodelcomp.png")
 ```
 **Image Segmentation:** In the past, image segmentation algorithms with different approaches have emerged, but the emergence of Deep Learning models has “caused a paradigm shift” [@9356353] in the field of image segmentation, because they perform so well. Image segmentation with Deep Learning is a widely researched field of computer vision with wide and diverse applications in real life, like autonomous driving, medical imaging, video surveillance, and saliency detection [@10.1145/3329784]. There is a plethora of widely used algorithms for different fields of application which can be differentiated by being (un-)supervised, their type of learning and the level of segmentation (ibid.). For this part of the project, we used *Tracer*, a convolutional attention-guided tool, as it proved to perform remarkably well at a relatively low computation time [@lee2021tracer].
@@ -79,7 +79,7 @@ Since our project is based on a Kaggle competition ^[The competition can be foun
 
 - insert graphic of species distribution
 
-```{r fig2, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Distribution of Species across the dataset"}
+```{r fig3, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Distribution of Species across the dataset"}
 knitr::include_graphics("figures/species_distribution.png")
 ```
 
@@ -87,7 +87,7 @@ knitr::include_graphics("figures/species_distribution.png")
 
 Separating the animals from the background was an elementar step of the picture pre- processing. In our case, the background of the pictures was not relevant for our research interest and therefore did not have to be included in the images we trained our models with. Contrary, the background would only have been disturbing, inflated the data size and disrupted the ML/DL pipelines by making more elaborate calculations necessary. For the segmentation of the images, we used *Tracer* [@lee2021tracer] which is a deep learning model that works with already cropped images and a specified pixel size. Because our images had the size 512x512, we employed the TRACER-efficient-5 model. *Tracer* derives which elements in the training image are part of the object and which are part of the background and are going to be coloured white. In order to make this decision, the program sets thresholds in the variation in the pixels. Tracer repeatedly attempts (Epochs) to find the edge of the object. After the first attempts at finding the edge, this attempt is removed and compared to the final attempt at mass edged attention module, creating the segmented image. This comparison attempts for any loss that may have occurred to be accounted for, therefore producing a more accurate segmented image.
 
-```{r fig3, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Example image pre- and post segmentation"}
+```{r fig4, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Example image pre- and post segmentation"}
 knitr::include_graphics("figures/cropped_segmented_example.png")
 ```
 
@@ -135,9 +135,10 @@ For the ML models it was expected to achieve a low performance. In that regard, 
 
 The results in the Deep Learning models were varied. The Baseline model had a mean average precision score of 0.00005 after 200 epochs, but by switching from EficentNetB0 to B1 and increasing the number of epochs to 500, we were able to increase the score to 11%. Running the adjusted model, however, more than doubled the running time from around 3 to around 8 hours. The loss of the baseline model is around 1.5, and for the tuned model around 1. Our model in predicting species was already quite high in accuracy at 60% after only two epochs, showing its performance when presented with 26 vs over 11,000 classes. Its loss score was 1.3 and it ran in only three minutes.
 
-- a summary of the evaluation results is provided in the following table:
-- include the results table of the DL model
-
+A summary of the evaluation results is provided in the following table:
+```{r fig5, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Results of the Deep Learing Model"}
+knitr::include_graphics("figures/dl_eval_results.png")
+```
 The Deep Learning models were expected to achieve higher precision than 0.00005, however after changing our parameters after our Baseline results by increasing the number of epochs and switching to a different version of EfficentNet we were able to increase both our accuracy and precision score, while decreasing our loss. As a result, we were able to deduce that increasing the number of epochs would increase precision by comparing our results to those of other Kagglers.
 
 
