@@ -150,7 +150,9 @@ A summary of the evaluation results is provided in the following table:
 ```{r fig7, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Results of the Deep Learing Model"}
 knitr::include_graphics("figures/dlevalresults.png")
 ```
-Figure 8 below shows the loss score over time as we ran the graph as we searched for individuals over a span of 500 epcohs. As you can see it does not change the outcome much after 450 epcoch so for future reserach it would be recomenned to switch to a B2 Efficientnet. 
+
+Figure 8 below shows the loss score over time as we ran the graph as we searched for individuals over a span of 500 epochs. As you can see it does not change the outcome much after 450 epoch so for future research it would be recommended to switch to a B2 Efficientnet. 
+
 ```{r fig8, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Loss Graph of the Individual Ids Tuned Model"}
 knitr::include_graphics("figures/dlevalresults.png")
 ```
