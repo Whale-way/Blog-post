@@ -26,8 +26,6 @@ knitr::opts_chunk$set(echo = FALSE)
 #library(reticulate) # For rendering Python code 
 ```
 
-## Abstract 
-
 ```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Example photo-ID over time"}
 knitr::include_graphics("figures/photoIDexample.png")
 ```
@@ -98,15 +96,15 @@ In addition the following data cleaning and wrangling steps had to be performed:
 
 Originally, it was planned to tune, train and test the ML models first on the images before PCA is applied and then a second time after PCA has been applied on the data to validate the assumption that a large amount of white pixels can be dropped from the segmented images without loosing any relevant information for classification. But running any machine learning model on our available hardware (there was no constant availability of the Hertie Server) was impossible even for a reduced resolution of the images of 48 x 48 (which results in 6,912 features per image). For this reason, the application of PCA had to be moved to the beginning.
   
-To **establish a baseline**, we are implementing a **Softmax Regression using the Scikit Learn Multiclass Logistic Regression module**. Researchers often rely on Softmax as a conventional supervised ML method for the good classification performance (see Related Work section). As Soft- max delivers similarly accurate results as kNN and SVM and needs significantly less time when working with large datasets, it is the appropriate method for us. 
+To **establish a baseline**, we are implementing a **Softmax Regression using the Scikit Learn Multiclass Logistic Regression module**. Researchers often rely on Softmax as a conventional supervised ML method for the good classification performance (see Related Work section). As Softmax delivers similarly accurate results as kNN and SVM and needs significantly less time when working with large datasets, it is the appropriate method for us. 
   
 **Building on that baseline** we implemented and tuned a **Random Forest (RF) model and XGBoost with early stopping** in a second step, to be able to compare the three selected ML models. RF classifications are popular for achieving similarly good prediction results as kNN, SVM and Softmax, while being significantly faster than those, which is why we are choosing it as a second ML model. Additionally to their good training speed, RF has a number of other advantages that make it useful for our classification task. Most importantly, RF is not sensitive to over-fitting and can handle unbalanced datasets, which enables trying out different hyperparameter configurations. The XGBoost model was selected due to its high popularity for classification tasks in the context of Kaggle competitions and to compare a bagging and a boosting approach to the problem at hand. While being generally slower than Random Forest and Logistic Regression, XGBoost is suitable for the application at hand since the low training speed is not the only crucial criterion and XGBoost is known for achieving better classification than Random Forest. Being also a tree-based method, using XGBoost allowed us to compare two similar ML classifiers on the same hyperparameters.
   
-Due to constraints of the computational power available to us, we couldn't neither use Scikit-Learn’s GridSearchCV nor RandomizedSearchCV. Therefore, a Learning Curve approach was chosen to overcome those computational barriers. This method also uses GridSearchCV, however with a pre-specified maximal depth of the trees and the only parameter to be tuned being the number of trees (i.e., number of estimators).The learning curve depicts the precision score vs. number of trees, as well as the training time vs. number of trees or both a training set and a testing set used in the cross validation. Therefore, the best number of trees can easily be identified, which delivers the best precision while not risking over-fitting and having a good training time.
+Due to constraints of the computational power available to us, we could neither use Scikit-Learn’s GridSearchCV nor RandomizedSearchCV. Therefore, a Learning Curve approach was chosen to overcome those computational barriers. This method also uses GridSearchCV, however with a pre-specified maximal depth of the trees and the only parameter to be tuned being the number of trees (i.e., number of estimators). The learning curve depicts the precision score vs. number of trees, as well as the training time vs. number of trees for both a training set and a testing set used in the cross validation. Therefore, the best number of trees can easily be identified, which delivers the best precision while not risking over-fitting and having a good training time.
 
 ### Deep Learning Aproach
 
-We used a deep learning approach to achieve two outcomes - one being our submission for the Kaggle competition, which looks at individuals classification, and secondly, species-based prediction for comparing our results with the non Deep Learning portion of this project.
+In addition, we used a deep learning approach to achieve two outcomes - one being our submission for the Kaggle competition, which looks at individuals classification, and secondly, species-based prediction for comparing our results with the non Deep Learning portion of this project.
 
 The Deep Learning model we have employed is a combination of the features of a transformer and convolutions. The EfficientNet model uses a combined Convolutional Neural Network (CNN) and is a more efficient version of ResNet trained on Image Net. We have chosen this model for two reasons: the performance recommendation of other Kaggle users in the competition and how lightweight this model is. This ensures high performance, great accuracy and a model that can efficiently, in terms of computational capacity, be carried out on the Hertie Server.
 
@@ -114,21 +112,18 @@ The Deep Learning model we have employed is a combination of the features of a t
 If you want to dig deeper into this model setup, we can highly recommend the paper from [@mingxing2019]
 </aside>
 
-To ensure peak learning of the model, we used two Keras packages that stop the learning when it is no longer improving. This helps to protect the model from over-fitting and ensures that it is as accurate and precise as possible. The overall time was, on average, 8 hours when using individual IDs as classifiers, with each epoch taking an average of 40 seconds.
+To ensure peak learning of the model, we used two *Keras* packages that stop the learning when it is no longer improving. This helps to protect the model from over-fitting and ensures that it is as accurate and precise as possible. The overall training time was, on average, 8 hours when using individual IDs as classifiers, with each epoch taking an average of 40 seconds.
 
 ### Evaluation
 
 For the **evaluation in our Machine Learning approach** we used the classical metrics to evaluate classification models: **the confusion matrix and the accuracy, precision, recall and F1 score.** To have an initial check for over-fitting we evaluate the classifiers both on the training and a separate evaluation set. For our purposes, it is most desirable to have a good ratio of true positive outcomes among positive classified images. In line with this description of the importance of a low number of false positives over the low number of false negatives, a higher precision score is more important than a higher recall score regarding the quality of our outcome. We, additionally, use the F1-score, which is a sub-contrary mean of recall and precision, to combine them. Overall, the accuracy and precision are the two most important metrics for us, as these are the ones also used in the Kaggle competition, our Deep Learning classification, and in most image classification literature.
 
-For the **evaluation of our Deep Learning classifier** we used:
-
-**Categorical Crossentropy** which is a loss function that is used in mutually-exclusive multi-class classification tasks. These are tasks where an example can only belong to one out of many possible categories, and the model must decide which one.
-**Mean Average Precision** For the evaluation of the results of the individuals precision,score at 5 was calculated by Kaggle. This allows to predict five IDs per image, whereby a score of one is reached for the image if one of those five is correct.
+For the **evaluation of our Deep Learning classifier** we used **Categorical Crossentropy** which is a loss function that is used in mutually-exclusive multi-class classification tasks. These are tasks where an example can only belong to one out of many possible categories, and the model must decide which one. For evaluating the results of predicting individuals, the **Mean Average Precision** score at 5 was calculated by Kaggle. This allowed us to predict five IDs per image, whereby a score of one (best score) is reached if one of those five predictions is correct.
 For the purpose of species prediction, **the accuracy score and precision scores** were used as the primary metric, to make the results of the ML models comparable.
 
 ## Results
 
-Results For the ML models the following results on our evaluation scores were obtained after predicting the labels in the test set. The tuned XGBoost Classifier yielded the best scores in every category except for the training time, with a top precision score of 11.8% and accuracy of 17%. The training time of 26 minutes 48 seconds is significantly higher than that of the Softmax (LG) and Random Forest models. An overview of the evaluation results is given in the following table:
+For the ML models the following results on our evaluation scores were obtained after predicting the labels in the test set. The tuned XGBoost Classifier yielded the best scores in every category except for the training time, with a top precision score of 11.8% and accuracy of 17%. The training time of 26 minutes 48 seconds is significantly higher than that of the Softmax (LG) and Random Forest models. An overview of the evaluation results is given in the following table:
 
 ```{r fig4, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Results of the Machine Learing Models"}
 knitr::include_graphics("figures/mlevalresults.png")
