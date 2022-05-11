@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Abstract 
 
 ```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Model architecture"}
-knitr::include_graphics("figures/photoIDexample.png")
+knitr::include_graphics("figures/accuracy_tuned.png")
 ```
 
 Man-made climate change is one of the main challenges for humanity and of concern for many scientific disciplines investigating its multiple, complex impacts on nature and societies. One of the ecosystems impacted are marine ecosystems. Research concerning marine mammals makes an important contribution to our knowledge about changes in the oceans, as marine mammals are indicators of ocean ecosystem health. Therefore their protection and conservation is a crucial task. Up until today, most observation and tracking of individual animals and populations is done manually by humans - a time consuming and error- prone method. Motivated by a Kaggle competition funded by the research collaboration ”Happywhale”, we aim to contribute to the efforts by automating whale and dolphin photo-ID to significantly reduce image identification times. We investigated the use of conventional Machine Learning and a Deep Learning algorithm for this image classification task.As expected, we find that conventional machine learning classifiers under-perform in correctly distinguishing between subtle characteristics of the natural markings of whales and dolphins and therefore state-of-the-art deep learning models are needed for this complex task. 
@@ -109,7 +109,7 @@ Due to constraints of the computational power available to us, we couldn't neith
 
 We used a deep learning approach to achieve two outcomes - one being our submission for the Kaggle competition, which looks at individuals classification, and secondly, species-based prediction for comparing our results with the non Deep Learning portion of this project.
 
-The Deep Learning model we have employed is a combination of the features of a transformer and convolutions. This EfficientNet uses a combined Convolutional Neural Network (CNN) and a more efficient version of ResNet trained on Image Net. We have chosen this model for two reasons: the performance recommendation of other Kaggle users in the competition and how lightweight this model is. This ensures high performance, great accuracy and a model that can efficiently, in terms of computational capacity, be carried out on the Hertie Server.
+The Deep Learning model we have employed is a combination of the features of a transformer and convolutions. The EfficientNet model uses a combined Convolutional Neural Network (CNN) and is a more efficient version of ResNet trained on Image Net. We have chosen this model for two reasons: the performance recommendation of other Kaggle users in the competition and how lightweight this model is. This ensures high performance, great accuracy and a model that can efficiently, in terms of computational capacity, be carried out on the Hertie Server.
 
 <aside>
 If you want to dig deeper into this model setup, we can highly recommend the paper from [@mingxing2019]
@@ -150,7 +150,10 @@ A summary of the evaluation results is provided in the following table:
 ```{r fig7, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Results of the Deep Learing Model"}
 knitr::include_graphics("figures/dlevalresults.png")
 ```
-
+Figure 8 below shows the loss score over time as we ran the graph as we searched for individuals over a span of 500 epcohs. As you can see it does not change the outcome much after 450 epcoch so for future reserach it would be recomenned to switch to a B2 Efficientnet. 
+```{r fig8, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Loss Graph of the Individual Ids Tuned Model"}
+knitr::include_graphics("figures/dlevalresults.png")
+```
 The Deep Learning models were expected to achieve higher precision than 0.00005, however after changing our parameters after our Baseline results by increasing the number of epochs and switching to a different version of EfficentNet we were able to increase both our accuracy and precision score, while decreasing our loss. As a result, we were able to deduce that increasing the number of epochs would increase precision by comparing our results to those of other Kagglers.
 
 
