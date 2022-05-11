@@ -28,8 +28,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Abstract 
 
-```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Model architecture"}
-knitr::include_graphics("figures/accuracy_tuned.png")
+```{r fig1, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Example photo-ID over time"}
+knitr::include_graphics("figures/photoIDexample.png")
 ```
 
 Man-made climate change is one of the main challenges for humanity and of concern for many scientific disciplines investigating its multiple, complex impacts on nature and societies. One of the ecosystems impacted are marine ecosystems. Research concerning marine mammals makes an important contribution to our knowledge about changes in the oceans, as marine mammals are indicators of ocean ecosystem health. Therefore their protection and conservation is a crucial task. Up until today, most observation and tracking of individual animals and populations is done manually by humans - a time consuming and error- prone method. Motivated by a Kaggle competition funded by the research collaboration ”Happywhale”, we aim to contribute to the efforts by automating whale and dolphin photo-ID to significantly reduce image identification times. We investigated the use of conventional Machine Learning and a Deep Learning algorithm for this image classification task.As expected, we find that conventional machine learning classifiers under-perform in correctly distinguishing between subtle characteristics of the natural markings of whales and dolphins and therefore state-of-the-art deep learning models are needed for this complex task. 
@@ -88,8 +88,7 @@ knitr::include_graphics("figures/croppedsegmentedexample.png")
 
 In addition the following data cleaning and wrangling steps had to be performed:
 
-- cleaning of the provided .CSV-file that includes the individual-IDs, the species and the file-
-name, as we discovered misspellings in the species column
+- cleaning of the provided .CSV-file that includes the individual-IDs, the species and the filename, as we discovered misspellings in the species column
 - turning images into machine-interpretable which we did using NumPy
 - implementing a function to resize the picture to different pixel sizes
 
@@ -119,7 +118,7 @@ To ensure peak learning of the model, we used two Keras packages that stop the l
 
 ### Evaluation
 
-For the **evaluation in our Machine Learning approach** we used the classical metrics to evaluate classification models: **the confusion matrix and the accuracy, precision, recall and F1 score.** To have an initial check for over-fitting we evaluate the classifiers both on the training and a separate evaluation set. For our purposes, it is most desirable to have a good ratio of true positive outcomes among positive classified images. In line with this description of the importance of a low number of false positives over the low number of false negatives, a higher precision score is more important than a higher recall score regarding the quality of our outcome. We, additionally, use the F1-score, which is a sub-contrary mean of recall and precision, to combine them. Overall, the accuracy and precision are the two most important metrics for us, as these are the ones also used in the Kaggle competition, our Deep Learning classification, and in most image classifica- tion literature.
+For the **evaluation in our Machine Learning approach** we used the classical metrics to evaluate classification models: **the confusion matrix and the accuracy, precision, recall and F1 score.** To have an initial check for over-fitting we evaluate the classifiers both on the training and a separate evaluation set. For our purposes, it is most desirable to have a good ratio of true positive outcomes among positive classified images. In line with this description of the importance of a low number of false positives over the low number of false negatives, a higher precision score is more important than a higher recall score regarding the quality of our outcome. We, additionally, use the F1-score, which is a sub-contrary mean of recall and precision, to combine them. Overall, the accuracy and precision are the two most important metrics for us, as these are the ones also used in the Kaggle competition, our Deep Learning classification, and in most image classification literature.
 
 For the **evaluation of our Deep Learning classifier** we used:
 
@@ -131,42 +130,47 @@ For the purpose of species prediction, **the accuracy score and precision scores
 
 Results For the ML models the following results on our evaluation scores were obtained after predicting the labels in the test set. The tuned XGBoost Classifier yielded the best scores in every category except for the training time, with a top precision score of 11.8% and accuracy of 17%. The training time of 26 minutes 48 seconds is significantly higher than that of the Softmax (LG) and Random Forest models. An overview of the evaluation results is given in the following table:
 
-```{r fig5, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Results of the Machine Learing Models"}
+```{r fig4, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Results of the Machine Learing Models"}
 knitr::include_graphics("figures/mlevalresults.png")
 ```
 
 For the ML models it was expected to achieve a low performance. In that regard, the scores of our models achieve better results than expected, especially as the precision score is above 10% for each classifier. An issue that persists across all our models is the high degree of over-fitting to the training data. A highly uncommon result was obtained during the tuning of hyperparameters using the Learning Curve, namely that the precision decreased with increasing number of trees.
 
-```{r fig6, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Learning Curve of Random Forest classifier"}
+```{r fig5, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Learning Curve of Random Forest Classifier"}
 knitr::include_graphics("figures/mllearningcurve.png")
 ```
 
 Figure 6 illustrates on the left side that the best precision is obtained with just 10 trees. The line for the training set is not visible, but follows a similar behavior. The precision for the training set with 10 trees is at 0.69, indicating over-fitting. However, the precision on both the training and the test set drops dramatically already for 50 trees while the training time increases significantly when increasing the number of trees. This unusual behavior can only be explained because of the complexity of the dataset and the incapacity of Random Forest to handle the subtle differences between the species.
 
-The results in the Deep Learning models were varied. The Baseline model had a mean average precision score of 0.00005 after 200 epochs, but by switching from EficentNetB0 to B1 and increasing the number of epochs to 500, we were able to increase the score to 11%. Running the adjusted model, however, more than doubled the running time from around 3 to around 8 hours. The loss of the baseline model is around 1.5, and for the tuned model around 1. Our model in predicting species was already quite high in accuracy at 60% after only two epochs, showing its performance when presented with 26 vs over 11,000 classes. Its loss score was 1.3 and it ran in only three minutes.
+The results in the Deep Learning models were varied. The Baseline model had a mean average precision score of 0.00005 after 200 epochs, but by switching from EfficientNetB0 to B1 and increasing the number of epochs to 500, we were able to increase the score to 11%. Running the adjusted model, however, more than doubled the running time from around 3 to around 8 hours. The loss of the baseline model is around 1.5, and for the tuned model around 1. Our model in predicting species was already quite high in accuracy at 60% after only two epochs, showing its performance when presented with 26 vs over 11,000 classes. Its loss score was 1.3 and it ran in only three minutes.
 
 A summary of the evaluation results is provided in the following table:
 
-```{r fig7, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Results of the Deep Learing Model"}
+```{r fig6, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Results of the Deep Learing Model"}
 knitr::include_graphics("figures/dlevalresults.png")
 ```
-Figure 8 below shows the loss score over time as we ran the graph as we searched for individuals over a span of 500 epcohs. As you can see it does not change the outcome much after 450 epcoch so for future reserach it would be recomenned to switch to a B2 Efficientnet. 
-```{r fig8, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Loss Graph of the Individual Ids Tuned Model"}
-knitr::include_graphics("figures/dlevalresults.png")
+
+Figure 7 below shows the loss score of the model over time as we searched for individuals over a span of 500 epochs. As you can see, it does not change the outcome much after 450 epochs so for future research it would be recommended to switch to a B2 EfficientNet.
+
+```{r fig7, eval = TRUE, echo = FALSE, out.width = '100%', fig.cap = "Loss Graph of the Individual IDs Tuned Model"}
+knitr::include_graphics("figures/losstuned.png")
 ```
-The Deep Learning models were expected to achieve higher precision than 0.00005, however after changing our parameters after our Baseline results by increasing the number of epochs and switching to a different version of EfficentNet we were able to increase both our accuracy and precision score, while decreasing our loss. As a result, we were able to deduce that increasing the number of epochs would increase precision by comparing our results to those of other Kagglers.
+
+The Deep Learning models were expected to achieve higher precision than 0.00005, however after changing our parameters after our Baseline results by increasing the number of epochs and switching to a different version of EfficientNet we were able to increase both our accuracy and precision score, while decreasing our loss. As a result, we were able to deduce that increasing the number of epochs would increase precision by comparing our results to those of other Kagglers.
 
 
 ## Analysis and Limitations
 
 Next to our quantitative assessment we looked more deeply at errors and their origin in the dataset. We, firstly, created error tables that enable us to identify the image IDs for pictures that were predicted wrongly. Next, a confusion matrix was used to get a better understanding of the error distribution. This analysis is, for sake of clarity, limited to the tuned classifiers. Considering the multiple steps of our project, the first possible source for errors is the pre-cropped dataset which includes distorted and blurred images that could be considered outliers. Furthermore, considering the imbalance of our dataset, there is a large amount of errors stemming from an under-represention of species. There are multiple classes none of which the ML classifiers were able to entirely predict correclty. This could be due to the fact that there are some species which do not have very unique or distinguishable fins (or no fins at all, such as beluga whales). Therefore separately training and setting the thresholds for each species could be a way forward to improve prediction success.
 
-Our research was bound by certain limitations such as, resource constraints, especially in terms of time and computational power. Keeping that in mind, in the following paragraph we discuss in detail where there is room for possible improvements. The project could have been improved with more extensive hyperparameter tuning, and by including further hyperparameters. We do not expect the results for the conventional ML models to increase in a way that they are comparable to the DL model, but certainly some improvements in prediction performance. As discussed, DL models dominate the literature, therefore we would suggest to focus the improvements on the DL model. For the implemented Deep Learning model, it would have been beneficial to have more GPU power and training time to train it more extensively. The leading participants of the Kaggle competition submitted multiple hundreds of attempts and retrained their models accordingingly.
+Our research was bound by certain limitations such as, resource constraints, especially in terms of time and computational power. Keeping that in mind, in the following paragraph we discuss in detail where there is room for possible improvements. The project could have been improved with more extensive hyperparameter tuning, and by including further hyperparameters. We do not expect the results for the conventional ML models to increase in a way that they are comparable to the DL model, but certainly some improvements in prediction performance. As discussed, DL models dominate the literature, therefore we would suggest to focus the improvements on the DL model. For the implemented Deep Learning model, it would have been beneficial to have more GPU power and training time to train it more extensively. The leading participants of the Kaggle competition submitted multiple hundreds of attempts and retrained their models accordingly.
 
 
-## Conclusion(s)
+## Conclusion
 
-This project confirms current research practice that conventional ML algorithms are not optimized for solving complex classification tasks in a very precise and quick manner, and that Deep Learning approaches, such as CNN, are needed for tasks including but not limited to automating photo-ID and matching. We achieved and accuracy scores of 17% with the conventional ML models on species identification, but accuracy of over 60% with a only limited trained Deep Learning model. Especially when aiming for the original goal of the Kaggle Competition to identify individual animals, a extensively trained DL model is needed to build on the 11% accuracy achieved.
+This project confirms current research practice that conventional ML algorithms are not optimized for solving complex classification tasks in a very precise and quick manner, and that Deep Learning approaches, such as CNN, are needed for tasks including but not limited to automating photo-ID and matching. We achieved and accuracy scores of 17% with the conventional ML models on species identification, but accuracy of over 60% with a only limited trained Deep Learning model. Especially when aiming for the original goal of the Kaggle Competition to identify individual animals, a extensively trained DL model is needed to build on the 11% accuracy achieved.  
+  
+**WHEN THERE IS A WHALE, THERE IS A WAY!**
 
 
 ## Acknowledgments 
